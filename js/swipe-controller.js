@@ -211,7 +211,10 @@ class SwipeController {
                     delay: this.settings.autoplaySpeed * 1000,
                     disableOnInteraction: false
                 } : false,
-                loop: this.settings.loopMode,
+                loop: false, // 強制的にループを無効
+                rewind: false, // リワインドも無効
+                allowSlidePrev: true,
+                allowSlideNext: true,
                 on: {
                     init: (swiper) => {
                         console.log('Swiper initialized successfully'); // デバッグ用ログ
@@ -221,11 +224,25 @@ class SwipeController {
                         this.startAutoPlay();
                     },
                     slideChange: (swiper) => {
-                        if (swiper && swiper.realIndex !== undefined) {
-                            this.currentSlide = swiper.realIndex;
+                        if (swiper && swiper.activeIndex !== undefined) {
+                            this.currentSlide = swiper.activeIndex;
                             this.updateUI();
                             this.updateProgress();
                         }
+                    },
+                    reachBeginning: (swiper) => {
+                        console.log('Reached beginning - preventing further navigation'); // デバッグ用ログ
+                        swiper.allowSlidePrev = false;
+                        setTimeout(() => {
+                            swiper.allowSlidePrev = true;
+                        }, 100);
+                    },
+                    reachEnd: (swiper) => {
+                        console.log('Reached end - preventing further navigation'); // デバッグ用ログ
+                        swiper.allowSlideNext = false;
+                        setTimeout(() => {
+                            swiper.allowSlideNext = true;
+                        }, 100);
                     },
                     autoplayStart: () => {
                         this.isAutoPlaying = true;
@@ -486,19 +503,34 @@ class SwipeController {
      */
     nextSlide() {
         if (this.swiper && typeof this.swiper.slideNext === 'function') {
-            this.swiper.slideNext();
+            // 最後のスライドでないかチェック
+            if (this.currentSlide < this.totalSlides - 1) {
+                this.swiper.slideNext();
+            } else {
+                console.log('Already at last slide - preventing navigation');
+            }
         }
     }
 
     prevSlide() {
         if (this.swiper && typeof this.swiper.slidePrev === 'function') {
-            this.swiper.slidePrev();
+            // 最初のスライドでないかチェック
+            if (this.currentSlide > 0) {
+                this.swiper.slidePrev();
+            } else {
+                console.log('Already at first slide - preventing navigation');
+            }
         }
     }
 
     goToSlide(index) {
         if (this.swiper && typeof this.swiper.slideTo === 'function') {
-            this.swiper.slideTo(index);
+            // 有効なインデックス範囲かチェック
+            if (index >= 0 && index < this.totalSlides) {
+                this.swiper.slideTo(index);
+            } else {
+                console.log('Invalid slide index:', index);
+            }
         }
     }
 
