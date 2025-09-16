@@ -216,6 +216,17 @@ body {
     .slide-content-container {
         max-width: none; /* コンテンツもフルサイズ */
         height: 100vh; /* フルスクリーン高さ */
+        width: 100vw; /* 画面幅いっぱい */
+        margin: 0; /* マージンをリセット */
+        border-radius: 0; /* 角丸をリセット */
+    }
+    
+    /* モバイル専用：動画を画面いっぱいに表示 */
+    .slide-video, .slide-image {
+        width: 100vw !important;
+        height: 100vh !important;
+        object-fit: cover !important; /* 画面全体をカバー */
+        object-position: center !important;
     }
 }
 
