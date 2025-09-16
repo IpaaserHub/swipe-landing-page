@@ -121,7 +121,8 @@ const SWIPER_CONFIG = {
         disableOnInteraction: false, // ユーザー操作後も自動再生を継続
         pauseOnMouseEnter: true // マウスホバー時に一時停止
     },
-    loop: true, // ループ再生
+    loop: false, // ループ無効（端で停止）
+    rewind: false, // 最後から最初に戻らない
     effect: 'slide', // エフェクト: 'slide', 'fade', 'cube', 'coverflow', 'flip'
     
     // ページネーション設定
@@ -147,8 +148,13 @@ const SWIPER_CONFIG = {
     mousewheel: {
         enabled: true,
         sensitivity: 1,
-        releaseOnEdges: true
+        releaseOnEdges: true,
+        preventWheelAction: 'auto' // エッジでのスクロール防止
     },
+    
+    // エッジでの動作制御
+    resistance: true,
+    resistanceRatio: 0.85,
     
     // タッチ操作（縦スワイプ用に最適化）
     touchEventsTarget: 'container',
