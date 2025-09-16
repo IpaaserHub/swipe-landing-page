@@ -290,6 +290,22 @@ body {
         padding: 0 !important;
         -webkit-backface-visibility: hidden !important; /* Chrome描画最適化 */
         backface-visibility: hidden !important;
+        pointer-events: none !important; /* 動画コントロール無効・タッチ透過 */
+    }
+    
+    /* Chrome用タッチイベント設定 */
+    .swiper-container, .swiper {
+        touch-action: pan-y !important; /* 縦スワイプのみ許可 */
+        -webkit-user-select: none !important; /* テキスト選択無効 */
+        user-select: none !important;
+        -webkit-touch-callout: none !important; /* Chrome長押しメニュー無効 */
+    }
+    
+    /* スワイプ操作を阻害しないよう調整 */
+    .swiper-wrapper, .swiper-slide {
+        -webkit-user-select: none !important;
+        user-select: none !important;
+        /* touch-actionを削除してSwiperのタッチ処理を優先 */
     }
 }
 

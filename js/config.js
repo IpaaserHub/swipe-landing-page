@@ -160,12 +160,15 @@ const SWIPER_CONFIG = {
     touchEventsTarget: 'container',
     simulateTouch: true,
     touchStartPreventDefault: false,
+    allowTouchMove: true, // Chrome用タッチムーブ許可
     
     // タッチ操作（縦スワイプ用に調整）
     touchRatio: 1,
     touchAngle: 60, // 縦スワイプを優先
     grabCursor: true,
-    threshold: 50, // スワイプ判定の閾値
+    threshold: 30, // Chrome用に閾値を下げる
+    longSwipesRatio: 0.5, // Chrome用ロングスワイプ
+    longSwipesMs: 300, // Chrome用ロングスワイプ時間
     
     // レスポンシブ対応
     breakpoints: {
