@@ -222,7 +222,7 @@ body {
         width: 100vw !important;
         height: 100vh !important;
         height: 100dvh !important; /* Chrome動的ビューポート */
-        position: fixed !important;
+        position: relative !important; /* fixedからrelativeに変更 */
         top: 0 !important;
         left: 0 !important;
         margin: 0 !important;
@@ -235,16 +235,14 @@ body {
         height: 100vh !important;
         height: 100dvh !important; /* Chrome動的ビューポート */
         max-width: none !important;
-        -webkit-transform: translateZ(0) !important; /* Chrome GPU加速 */
-        transform: translateZ(0) !important;
+        /* GPU加速を一時的に削除してタッチイベントテスト */
     }
     
     .swiper-wrapper {
         width: 100vw !important;
         height: 100vh !important;
         height: 100dvh !important; /* Chrome動的ビューポート */
-        -webkit-transform: translateZ(0) !important; /* Chrome GPU加速 */
-        transform: translateZ(0) !important;
+        /* GPU加速を一時的に削除してタッチイベントテスト */
     }
     
     .swiper-slide {
@@ -254,8 +252,7 @@ body {
         max-width: none !important;
         margin: 0 !important;
         padding: 0 !important;
-        -webkit-transform: translateZ(0) !important; /* Chrome GPU加速 */
-        transform: translateZ(0) !important;
+        /* GPU加速を一時的に削除してタッチイベントテスト */
     }
     
     .slide-content-container {
@@ -269,8 +266,7 @@ body {
         position: absolute !important;
         top: 0 !important;
         left: 0 !important;
-        -webkit-transform: translateZ(0) !important; /* Chrome GPU加速 */
-        transform: translateZ(0) !important;
+        /* GPU加速を一時的に削除してタッチイベントテスト */
     }
     
     /* モバイル専用：縦フル表示優先 */
