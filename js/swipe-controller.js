@@ -177,14 +177,15 @@ class SwipeController {
             <video class="slide-video slide-media" 
                    muted 
                    autoplay 
+                   loop
                    playsinline
-                   preload="metadata"
-                   webkit-playsinline
-                   x-webkit-airplay="allow"
-                   controls="false"
+                   preload="auto"
+                   webkit-playsinline="true"
+                   disablepictureinpicture
+                   controlslist="nodownload nofullscreen noremoteplayback"
+                   style="pointer-events: none;"
                    ${slide.poster ? `poster="${slide.poster}"` : ''}>
                 <source src="${slide.src}" type="video/mp4">
-                <source src="${slide.src}" type="video/webm">
                 <p>動画を再生できません。ブラウザが対応していない可能性があります。</p>
             </video>
         `;
