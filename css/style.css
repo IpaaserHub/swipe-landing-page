@@ -207,26 +207,67 @@ body {
 
 /* レスポンシブ設定 */
 @media (max-width: 767px) {
-    /* モバイル: フルサイズ表示 */
+    /* モバイル: 完全フルスクリーン */
+    html, body {
+        width: 100vw !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        position: relative !important;
+    }
+    .swipe-container {
+        width: 100vw !important;
+        height: 100vh !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .swiper {
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: none !important;
+    }
+    
+    .swiper-wrapper {
+        width: 100vw !important;
+        height: 100vh !important;
+    }
+    
     .swiper-slide {
-        max-width: none; /* 最大幅制限を解除 */
-        height: 100vh; /* フルスクリーン高さ */
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     
     .slide-content-container {
-        max-width: none; /* コンテンツもフルサイズ */
-        height: 100vh; /* フルスクリーン高さ */
-        width: 100vw; /* 画面幅いっぱい */
-        margin: 0; /* マージンをリセット */
-        border-radius: 0; /* 角丸をリセット */
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
     }
     
-    /* モバイル専用：動画を画面いっぱいに表示 */
+    /* モバイル専用：動画を完全フルスクリーン */
     .slide-video, .slide-image {
         width: 100vw !important;
         height: 100vh !important;
-        object-fit: cover !important; /* 画面全体をカバー */
+        object-fit: cover !important;
         object-position: center !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
 }
 
