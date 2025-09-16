@@ -178,9 +178,13 @@ class SwipeController {
                    muted 
                    autoplay 
                    playsinline
-                   preload="auto"
+                   preload="metadata"
+                   webkit-playsinline
+                   x-webkit-airplay="allow"
+                   controls="false"
                    ${slide.poster ? `poster="${slide.poster}"` : ''}>
                 <source src="${slide.src}" type="video/mp4">
+                <source src="${slide.src}" type="video/webm">
                 <p>動画を再生できません。ブラウザが対応していない可能性があります。</p>
             </video>
         `;
@@ -222,12 +226,16 @@ class SwipeController {
                         this.currentSlide = 0;
                         this.updateUI();
                         this.startAutoPlay();
+                        // 初期スライドの動画再生を確保
+                        this.ensureVideoPlayback();
                     },
                     slideChange: (swiper) => {
                         if (swiper && swiper.activeIndex !== undefined) {
                             this.currentSlide = swiper.activeIndex;
                             this.updateUI();
                             this.updateProgress();
+                            // モバイル用：動画再生を強制開始
+                            this.ensureVideoPlayback();
                         }
                     },
                     reachBeginning: (swiper) => {
@@ -616,6 +624,60 @@ class SwipeController {
     showError(message) {
         console.error(message);
         // エラー表示UI（必要に応じて実装）
+    }
+
+    /**
+     * モバイル用動画再生確保
+     */
+    ensureVideoPlayback() {
+        setTimeout(() => {
+            const activeSlide = document.querySelector('.swiper-slide-active');
+            if (activeSlide) {
+                const video = activeSlide.querySelector('video');
+                if (video) {
+                    console.log('Ensuring video playback for mobile...'); // デバッグ用ログ
+                    
+                    // 動画再生を試行
+                    const playPromise = video.play();
+                    if (playPromise !== undefined) {
+                        playPromise
+                            .then(() => {
+                                console.log('Video playback started successfully');
+                            })
+                            .catch(error => {
+                                console.log('Video autoplay failed, user interaction required:', error);
+                                // モバイルでのユーザー操作が必要な場合
+                                this.handleVideoAutoplayFailure(video);
+                            });
+                    }
+                }
+            }
+        }, 100);
+    }
+
+    /**
+     * 動画自動再生失敗時の処理
+     */
+    handleVideoAutoplayFailure(video) {
+        // ユーザーの最初のタッチで全動画を再生可能にする
+        const enableVideoPlayback = () => {
+            const allVideos = document.querySelectorAll('video');
+            allVideos.forEach(v => {
+                if (v.paused) {
+                    v.play().catch(e => console.log('Video play failed:', e));
+                }
+            });
+            
+            // イベントリスナーを削除
+            document.removeEventListener('touchstart', enableVideoPlayback);
+            document.removeEventListener('click', enableVideoPlayback);
+        };
+
+        // 最初のユーザー操作を待機
+        document.addEventListener('touchstart', enableVideoPlayback, { once: true });
+        document.addEventListener('click', enableVideoPlayback, { once: true });
+        
+        console.log('Video playback will be enabled on first user interaction');
     }
 
     /**
