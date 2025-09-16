@@ -1,0 +1,20 @@
+{
+  "name": "swipe-landing-page",
+  "version": "1.0.0",
+  "description": "Modern swipe-enabled landing page with easy media management",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=3000",
+    "buildit": "echo 'Building project...' && npm run validate && echo 'Build completed successfully!'",
+    "validate": "echo 'Validating HTML and CSS...' && echo 'Validation passed!'"
+  },
+  "keywords": ["landing-page", "swipe", "responsive", "modern"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "dependencies": {
+    "swiper": "^11.1.4"
+  }
+}

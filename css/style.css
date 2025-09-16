@@ -1,0 +1,605 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #7fb3d5;
+    --secondary-color: #d6eaf8;
+    --accent-color: #ebf5fb;
+    --text-color: #333;
+    --text-light: #666;
+    --white: #ffffff;
+    --black: #000000;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.15);
+    --gradient: linear-gradient(135deg, #7fb3d5 0%, #d6eaf8 70%, #ebf5fb 100%);
+    --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+    --border-radius: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --z-loading: 9999;
+    --z-settings: 1000;
+    --z-controls: 100;
+    --z-nav: 50;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    overflow: hidden;
+    height: 100vh;
+    background: var(--gradient);
+}
+
+/* Loading Screen */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: var(--z-loading);
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid var(--white);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.loading-screen p {
+    color: var(--white);
+    font-size: 18px;
+    font-weight: 500;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Main Container */
+.swipe-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Swiper Styles - レスポンシブ対応 */
+.swiper {
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh; /* 最小高さを確保 */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--gradient); /* 背景は全体に拡張 */
+}
+
+.swiper-wrapper {
+    height: 100vh; /* Swiperラッパーの高さも確保 */
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.swiper-slide {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    height: 100vh !important; /* 強制的に画面高さ */
+    min-height: 100vh;
+    width: 100%;
+    max-width: 500px; /* タブレット・PC用の最大幅 */
+    margin: 0 auto;
+    background: transparent; /* 個別スライドの背景は透明 */
+}
+
+/* スライドコンテンツのコンテナ */
+.slide-content-container {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* 明示的に画面高さ */
+    min-height: 100vh;
+    max-width: 500px; /* コンテンツの最大幅 */
+    margin: 0 auto;
+    background: var(--gradient); /* 背景グラデーションに合わせる */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Media Styles - レスポンシブ対応 */
+.slide-media {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 全体を表示 */
+    object-position: center;
+}
+
+.slide-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 全体を表示 */
+    object-position: center;
+    /* transition削除 - エフェクトを無効化 */
+}
+
+.slide-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 全体を表示 */
+    object-position: center;
+}
+
+/* レスポンシブ設定 */
+@media (max-width: 767px) {
+    /* モバイル: フルサイズ表示 */
+    .swiper-slide {
+        max-width: none; /* 最大幅制限を解除 */
+        height: 100vh; /* フルスクリーン高さ */
+    }
+    
+    .slide-content-container {
+        max-width: none; /* コンテンツもフルサイズ */
+        height: 100vh; /* フルスクリーン高さ */
+    }
+}
+
+@media (min-width: 768px) {
+    /* タブレット・PC: 中央固定幅 + 背景拡張 */
+    .swiper {
+        background: var(--gradient); /* 全体背景 */
+        align-items: center; /* 垂直センタリング */
+    }
+    
+    .swiper-slide {
+        max-width: 500px; /* コンテンツ幅を500pxに制限 */
+        height: 100vh; /* フルスクリーン高さを維持 */
+        /* box-shadow削除 - 立体感を無効化 */
+    }
+    
+    .slide-content-container {
+        /* border-radius削除 - 角丸を無効化 */
+        overflow: hidden;
+        height: 100%; /* 親要素の高さに合わせる */
+        max-height: 100vh; /* 最大高さを画面高さに制限 */
+    }
+    
+    /* 動画のアスペクト比を維持 */
+    .slide-video, .slide-image {
+        height: 100%;
+        width: 100%;
+        object-fit: contain; /* 全体を表示 */
+    }
+}
+
+@media (min-width: 1024px) {
+    /* デスクトップ: より大きな固定幅 */
+    .swiper-slide {
+        max-width: 600px; /* デスクトップでは少し大きく */
+        height: 100vh; /* フルスクリーン高さを維持 */
+    }
+    
+    .slide-content-container {
+        max-width: 600px;
+        height: 100%; /* 親要素の高さに合わせる */
+        max-height: 100vh; /* 最大高さを画面高さに制限 */
+    }
+}
+
+@media (min-width: 1440px) {
+    /* 大型デスクトップ: さらに大きく */
+    .swiper-slide {
+        max-width: 700px;
+        height: 100vh;
+    }
+    
+    .slide-content-container {
+        max-width: 700px;
+        height: 100%;
+        max-height: 100vh;
+    }
+}
+
+/* ホバーエフェクト削除 - 完全にフラットなデザイン */
+
+/* Content Overlay */
+.slide-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--white);
+    z-index: 10;
+    max-width: 80%;
+    opacity: 0;
+    animation: fadeInUp 1s ease forwards;
+}
+
+.slide-content h1,
+.slide-content h2 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.slide-content p {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    line-height: 1.4;
+}
+
+.slide-content .btn {
+    display: inline-block;
+    padding: 15px 30px;
+    background: var(--gradient-accent);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    border: none;
+    cursor: pointer;
+}
+
+.slide-content .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Navigation Dots - 非表示 */
+.nav-dots {
+    display: none;
+}
+
+.nav-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+.nav-dot.active {
+    background: var(--white);
+    transform: scale(1.2);
+    border-color: var(--accent-color);
+}
+
+.nav-dot:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(1.1);
+}
+
+/* Progress Bar */
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    z-index: var(--z-nav);
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-accent);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* Controls - 非表示 */
+.controls {
+    display: none;
+}
+
+.control-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    color: var(--text-color);
+}
+
+.control-btn:hover {
+    background: var(--white);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.control-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.play-pause-btn .pause-icon.hidden,
+.play-pause-btn .play-icon.hidden {
+    display: none;
+}
+
+/* Slide Counter - 非表示 */
+.slide-counter {
+    display: none;
+}
+
+/* Settings Toggle - 非表示 */
+.settings-toggle {
+    display: none;
+}
+
+/* Settings Panel - 非表示 */
+.settings-panel {
+    display: none;
+}
+
+.settings-panel h3 {
+    margin-bottom: 20px;
+    color: var(--text-color);
+    font-size: 1.2rem;
+}
+
+.setting-item {
+    margin-bottom: 20px;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-light);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.setting-item input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #ddd;
+    outline: none;
+    margin-bottom: 5px;
+}
+
+.setting-item input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+}
+
+.setting-item input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    border: none;
+}
+
+.setting-item span {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.setting-item input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: var(--primary-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-dots {
+        right: 20px;
+        gap: 12px;
+    }
+    
+    .nav-dot {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .controls {
+        bottom: 20px;
+        gap: 12px;
+    }
+    
+    .control-btn {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .slide-counter {
+        bottom: 20px;
+        left: 20px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .settings-toggle {
+        top: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+    }
+    
+    .settings-panel {
+        top: 75px;
+        right: 20px;
+        width: calc(100vw - 40px);
+        max-width: 280px;
+    }
+    
+    .slide-content {
+        max-width: 90%;
+    }
+    
+    .slide-content .btn {
+        padding: 12px 25px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-dots {
+        right: 15px;
+        gap: 10px;
+    }
+    
+    .nav-dot {
+        width: 8px;
+        height: 8px;
+    }
+    
+    .controls {
+        bottom: 15px;
+        gap: 10px;
+    }
+    
+    .control-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .control-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .slide-counter {
+        bottom: 15px;
+        left: 15px;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+    
+    .settings-toggle {
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .settings-panel {
+        top: 65px;
+        right: 15px;
+        width: calc(100vw - 30px);
+        padding: 20px;
+    }
+}
+
+/* Dark overlay for better text readability */
+.slide-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        45deg,
+        rgba(0, 0, 0, 0.3) 0%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0.3) 100%
+    );
+    z-index: 5;
+}
+
+/* Smooth transitions for swiper */
+.swiper-slide-active .slide-content {
+    animation: fadeInUp 1s ease forwards;
+}
+
+.swiper-slide:not(.swiper-slide-active) .slide-content {
+    opacity: 0;
+}
+
+/* Custom scrollbar for settings panel */
+.settings-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+.settings-panel::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.settings-panel::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+.settings-panel::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+/* Accessibility */
+.control-btn:focus,
+.nav-dot:focus,
+.settings-toggle:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .nav-dots,
+    .controls,
+    .slide-counter,
+    .settings-toggle,
+    .settings-panel,
+    .progress-bar {
+        display: none !important;
+    }
+    
+    .swiper-slide {
+        break-inside: avoid;
+    }
+}
