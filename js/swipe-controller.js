@@ -174,16 +174,15 @@ class SwipeController {
      */
     createVideoHTML(slide) {
         return `
-            <video class="slide-video slide-media" 
-                   muted 
-                   autoplay 
-                   loop
+            <video class="slide-video slide-media"
+                   muted
                    playsinline
-                   preload="auto"
+                   preload="metadata"
                    webkit-playsinline="true"
                    disablepictureinpicture
                    controlslist="nodownload nofullscreen noremoteplayback"
                    style="pointer-events: none;"
+                   data-slide-id="${slide.id}"
                    ${slide.poster ? `poster="${slide.poster}"` : ''}>
                 <source src="${slide.src}" type="video/mp4">
                 <p>動画を再生できません。ブラウザが対応していない可能性があります。</p>
@@ -238,8 +237,8 @@ class SwipeController {
                         this.currentSlide = 0;
                         this.updateUI();
                         this.startAutoPlay();
-                        // 初期スライドの動画再生を確保
-                        this.ensureVideoPlayback();
+                        // 初期スライドの動画再生を開始
+                        this.playCurrentSlideVideo();
                     },
                     touchStart: (swiper, event) => {
                         console.log('👆 タッチ開始:', event.type, {
@@ -255,8 +254,8 @@ class SwipeController {
                             this.currentSlide = swiper.activeIndex;
                             this.updateUI();
                             this.updateProgress();
-                            // モバイル用：動画再生を強制開始
-                            this.ensureVideoPlayback();
+                            // スライド変更時：新しい動画を1回再生
+                            this.playCurrentSlideVideo();
                         }
                     },
                     reachBeginning: (swiper) => {
@@ -648,32 +647,56 @@ class SwipeController {
     }
 
     /**
-     * モバイル用動画再生確保
+     * 現在のスライドの動画を1回再生
+     */
+    playCurrentSlideVideo() {
+        if (!this.swiper) return;
+        
+        const currentSlide = this.swiper.slides[this.swiper.activeIndex];
+        if (!currentSlide) return;
+        
+        // 全ての動画を停止
+        this.stopAllVideos();
+        
+        // 現在のスライドの動画を再生
+        const video = currentSlide.querySelector('.slide-video');
+        if (video) {
+            console.log('🎬 動画再生開始:', video.dataset.slideId);
+            video.currentTime = 0; // 最初から再生
+            
+            video.play().then(() => {
+                console.log('✅ 動画再生成功');
+            }).catch(error => {
+                console.warn('⚠️ 動画再生失敗:', error);
+                // 自動再生に失敗した場合のフォールバック
+                this.handleVideoAutoplayFailure(video);
+            });
+            
+            // 動画終了時の処理（1回のみ再生）
+            video.onended = () => {
+                console.log('🎬 動画再生完了');
+                // 動画は停止状態を維持（ループしない）
+            };
+        }
+    }
+    
+    /**
+     * 全ての動画を停止
+     */
+    stopAllVideos() {
+        const allVideos = this.container.querySelectorAll('.slide-video');
+        allVideos.forEach(video => {
+            video.pause();
+            video.currentTime = 0;
+        });
+    }
+
+    /**
+     * モバイル用動画再生確保（新実装）
      */
     ensureVideoPlayback() {
-        setTimeout(() => {
-            const activeSlide = document.querySelector('.swiper-slide-active');
-            if (activeSlide) {
-                const video = activeSlide.querySelector('video');
-                if (video) {
-                    console.log('Ensuring video playback for mobile...'); // デバッグ用ログ
-                    
-                    // 動画再生を試行
-                    const playPromise = video.play();
-                    if (playPromise !== undefined) {
-                        playPromise
-                            .then(() => {
-                                console.log('Video playback started successfully');
-                            })
-                            .catch(error => {
-                                console.log('Video autoplay failed, user interaction required:', error);
-                                // モバイルでのユーザー操作が必要な場合
-                                this.handleVideoAutoplayFailure(video);
-                            });
-                    }
-                }
-            }
-        }, 100);
+        // 新しい実装では playCurrentSlideVideo を使用
+        this.playCurrentSlideVideo();
     }
 
     /**
