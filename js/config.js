@@ -114,7 +114,7 @@ const MEDIA_CONFIG = {
 // スライダー設定
 const SWIPER_CONFIG = {
     // 基本設定
-    speed: 600, // 切り替え速度（ミリ秒）
+    speed: 800, // 切り替え速度（ミリ秒）- より滑らかに
     direction: 'vertical', // スライド方向: 'horizontal' または 'vertical'
     autoplay: {
         delay: 10000, // 自動再生間隔（ミリ秒）10秒
@@ -124,6 +124,11 @@ const SWIPER_CONFIG = {
     loop: false, // ループ無効（端で停止）
     rewind: false, // 最後から最初に戻らない
     effect: 'slide', // エフェクト: 'slide', 'fade', 'cube', 'coverflow', 'flip'
+    
+    // スムーズなアニメーション設定
+    cssMode: false, // CSS モードを無効にしてJS制御
+    freeMode: false, // フリーモード無効
+    freeModeSticky: false,
     
     // ページネーション設定
     pagination: {
@@ -163,12 +168,14 @@ const SWIPER_CONFIG = {
     allowTouchMove: true, // Chrome用タッチムーブ許可
     
     // タッチ操作（縦スワイプ用に調整）
-    touchRatio: 1,
-    touchAngle: 60, // 縦スワイプを優先
+    touchRatio: 1.5, // より敏感に
+    touchAngle: 45, // 縦スワイプ判定角度を調整
     grabCursor: true,
-    threshold: 30, // Chrome用に閾値を下げる
-    longSwipesRatio: 0.5, // Chrome用ロングスワイプ
-    longSwipesMs: 300, // Chrome用ロングスワイプ時間
+    threshold: 10, // 閾値をさらに下げて敏感に
+    longSwipesRatio: 0.3, // ロングスワイプをより短く
+    longSwipesMs: 200, // ロングスワイプ時間短縮
+    followFinger: true, // 指の動きに追従
+    shortSwipes: true, // 短いスワイプも有効
     
     // レスポンシブ対応
     breakpoints: {

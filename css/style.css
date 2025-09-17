@@ -207,31 +207,34 @@ body {
 
 /* レスポンシブ設定 */
 @media (max-width: 767px) {
-    /* モバイル: シンプルフルスクリーン（スワイプテスト） */
+    /* モバイル: 縦を優先したフルスクリーン */
     .swiper-slide {
         max-width: none;
         height: 100vh;
+        height: 100dvh; /* 動的ビューポート対応 */
     }
     
     .slide-content-container {
         max-width: none;
         height: 100vh;
+        height: 100dvh; /* 動的ビューポート対応 */
         width: 100vw;
         margin: 0;
         border-radius: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
-    /* モバイル専用：縦フル表示優先 */
+    /* モバイル専用：縦を必ず全て表示 */
     .slide-video, .slide-image {
-        width: auto;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         max-width: 100vw;
-        object-fit: contain;
+        max-height: 100vh;
+        max-height: 100dvh; /* 動的ビューポート対応 */
+        object-fit: contain; /* 縦を優先して全て表示 */
         object-position: center;
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
         margin: 0;
         padding: 0;
         pointer-events: none; /* 動画コントロール無効のみ */
