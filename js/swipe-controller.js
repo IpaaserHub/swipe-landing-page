@@ -237,8 +237,10 @@ class SwipeController {
                         this.currentSlide = 0;
                         this.updateUI();
                         this.startAutoPlay();
-                        // 初期スライドの動画再生を開始
-                        this.playCurrentSlideVideo();
+                        // 初期スライドの動画再生を遅延開始（DOM安定後）
+                        setTimeout(() => {
+                            this.playCurrentSlideVideo();
+                        }, 500);
                     },
                     touchStart: (swiper, event) => {
                         console.log('👆 タッチ開始:', event.type, {
@@ -650,33 +652,50 @@ class SwipeController {
      * 現在のスライドの動画を1回再生
      */
     playCurrentSlideVideo() {
-        if (!this.swiper) return;
-        
-        const currentSlide = this.swiper.slides[this.swiper.activeIndex];
-        if (!currentSlide) return;
-        
-        // 全ての動画を停止
-        this.stopAllVideos();
-        
-        // 現在のスライドの動画を再生
-        const video = currentSlide.querySelector('.slide-video');
-        if (video) {
-            console.log('🎬 動画再生開始:', video.dataset.slideId);
-            video.currentTime = 0; // 最初から再生
+        try {
+            if (!this.swiper) {
+                console.log('⚠️ Swiper未初期化');
+                return;
+            }
             
-            video.play().then(() => {
-                console.log('✅ 動画再生成功');
-            }).catch(error => {
-                console.warn('⚠️ 動画再生失敗:', error);
-                // 自動再生に失敗した場合のフォールバック
-                this.handleVideoAutoplayFailure(video);
-            });
+            const activeIndex = this.swiper.activeIndex || 0;
+            const currentSlide = this.swiper.slides[activeIndex];
+            if (!currentSlide) {
+                console.log('⚠️ 現在のスライドが見つかりません');
+                return;
+            }
             
-            // 動画終了時の処理（1回のみ再生）
-            video.onended = () => {
-                console.log('🎬 動画再生完了');
-                // 動画は停止状態を維持（ループしない）
-            };
+            // 全ての動画を停止
+            this.stopAllVideos();
+            
+            // 現在のスライドの動画を再生
+            const video = currentSlide.querySelector('.slide-video');
+            if (video) {
+                console.log('🎬 動画再生開始:', video.dataset.slideId || 'unknown');
+                
+                // 動画の状態をリセット
+                video.currentTime = 0;
+                
+                // 動画再生を試行
+                const playPromise = video.play();
+                if (playPromise && typeof playPromise.then === 'function') {
+                    playPromise.then(() => {
+                        console.log('✅ 動画再生成功');
+                    }).catch(error => {
+                        console.warn('⚠️ 動画再生失敗:', error.message);
+                        // エラーでも処理を継続
+                    });
+                }
+                
+                // 動画終了時の処理（1回のみ再生）
+                video.onended = () => {
+                    console.log('🎬 動画再生完了');
+                };
+            } else {
+                console.log('📹 動画要素が見つかりません');
+            }
+        } catch (error) {
+            console.error('❌ playCurrentSlideVideo エラー:', error.message);
         }
     }
     
@@ -684,19 +703,33 @@ class SwipeController {
      * 全ての動画を停止
      */
     stopAllVideos() {
-        const allVideos = this.container.querySelectorAll('.slide-video');
-        allVideos.forEach(video => {
-            video.pause();
-            video.currentTime = 0;
-        });
+        try {
+            if (!this.container) return;
+            
+            const allVideos = this.container.querySelectorAll('.slide-video');
+            allVideos.forEach(video => {
+                try {
+                    if (video.pause && typeof video.pause === 'function') {
+                        video.pause();
+                    }
+                    video.currentTime = 0;
+                } catch (error) {
+                    console.warn('⚠️ 動画停止エラー:', error.message);
+                }
+            });
+        } catch (error) {
+            console.error('❌ stopAllVideos エラー:', error.message);
+        }
     }
 
     /**
      * モバイル用動画再生確保（新実装）
      */
     ensureVideoPlayback() {
-        // 新しい実装では playCurrentSlideVideo を使用
-        this.playCurrentSlideVideo();
+        // 新しい実装では playCurrentSlideVideo を遅延実行
+        setTimeout(() => {
+            this.playCurrentSlideVideo();
+        }, 200);
     }
 
     /**
