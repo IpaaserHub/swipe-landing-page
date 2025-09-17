@@ -207,37 +207,78 @@ body {
 
 /* レスポンシブ設定 */
 @media (max-width: 767px) {
-    /* モバイル: 縦を優先したフルスクリーン */
-    .swiper-slide {
-        max-width: none;
+    /* モバイル: 上部余白を完全に除去 */
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
         height: 100vh;
         height: 100dvh; /* 動的ビューポート対応 */
+        overflow: hidden;
+    }
+    
+    .swipe-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100vh;
+        height: 100dvh;
+        width: 100vw;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+    
+    .swiper {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        width: 100vw !important;
+    }
+    
+    .swiper-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+    }
+    
+    .swiper-slide {
+        max-width: none;
+        height: 100vh !important;
+        height: 100dvh !important; /* 動的ビューポート対応 */
+        margin: 0 !important;
+        padding: 0 !important;
     }
     
     .slide-content-container {
         max-width: none;
-        height: 100vh;
-        height: 100dvh; /* 動的ビューポート対応 */
-        width: 100vw;
-        margin: 0;
+        height: 100vh !important;
+        height: 100dvh !important; /* 動的ビューポート対応 */
+        width: 100vw !important;
+        margin: 0 !important;
+        padding: 0 !important;
         border-radius: 0;
         display: flex;
         align-items: center;
         justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
     }
     
-    /* モバイル専用：縦を必ず全て表示 */
+    /* モバイル専用：縦を必ず全て表示・上部余白なし */
     .slide-video, .slide-image {
-        width: 100%;
-        height: 100%;
-        max-width: 100vw;
-        max-height: 100vh;
-        max-height: 100dvh; /* 動的ビューポート対応 */
-        object-fit: contain; /* 縦を優先して全て表示 */
-        object-position: center;
-        margin: 0;
-        padding: 0;
+        width: 100vw !important;
+        height: 100vh !important;
+        height: 100dvh !important; /* 動的ビューポート対応 */
+        object-fit: cover !important; /* 上部余白を避けるためcover使用 */
+        object-position: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
         pointer-events: none; /* 動画コントロール無効のみ */
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 }
 
