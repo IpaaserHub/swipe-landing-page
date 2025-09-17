@@ -259,26 +259,29 @@ body {
         padding: 0 !important;
         border-radius: 0;
         display: flex;
-        align-items: center;
+        align-items: flex-start !important; /* 上部に配置 */
         justify-content: center;
         position: absolute;
         top: 0;
         left: 0;
+        background: var(--gradient) !important; /* 背景色を動画に合わせる */
     }
     
-    /* モバイル専用：縦を必ず全て表示・上部余白なし */
+    /* モバイル専用：縦優先表示・上部余白除去 */
     .slide-video, .slide-image {
-        width: 100vw !important;
+        width: 100% !important;
         height: 100vh !important;
         height: 100dvh !important; /* 動的ビューポート対応 */
-        object-fit: cover !important; /* 上部余白を避けるためcover使用 */
-        object-position: center !important;
+        max-width: 100vw !important;
+        object-fit: contain !important; /* 縦を全て表示 */
+        object-position: top center !important; /* 上部に配置 */
         margin: 0 !important;
         padding: 0 !important;
         pointer-events: none; /* 動画コントロール無効のみ */
         position: absolute;
         top: 0;
-        left: 0;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 
