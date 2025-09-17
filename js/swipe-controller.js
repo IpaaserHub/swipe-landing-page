@@ -206,7 +206,11 @@ class SwipeController {
      * Swiper初期化
      */
     initializeSwiper() {
-        console.log('Initializing Swiper...'); // デバッグ用ログ
+        console.log('🟢 Swiper初期化開始...');
+        
+        // タッチイベントの確認
+        console.log('📱 タッチイベント対応:', 'ontouchstart' in window);
+        console.log('📱 ユーザーエージェント:', navigator.userAgent);
         
         try {
             const config = {
@@ -222,13 +226,29 @@ class SwipeController {
                 allowSlideNext: true,
                 on: {
                     init: (swiper) => {
-                        console.log('Swiper initialized successfully'); // デバッグ用ログ
+                        console.log('✅ Swiper初期化成功');
+                        console.log('📊 スライド数:', swiper.slides.length);
+                        console.log('🎛️ Swiper設定:', {
+                            touchRatio: swiper.params.touchRatio,
+                            threshold: swiper.params.threshold,
+                            touchAngle: swiper.params.touchAngle,
+                            simulateTouch: swiper.params.simulateTouch
+                        });
                         this.swiper = swiper;
                         this.currentSlide = 0;
                         this.updateUI();
                         this.startAutoPlay();
                         // 初期スライドの動画再生を確保
                         this.ensureVideoPlayback();
+                    },
+                    touchStart: (swiper, event) => {
+                        console.log('👆 タッチ開始:', event.type, {
+                            clientX: event.touches ? event.touches[0].clientX : event.clientX,
+                            clientY: event.touches ? event.touches[0].clientY : event.clientY
+                        });
+                    },
+                    touchMove: (swiper, event) => {
+                        console.log('👆 タッチ移動:', event.type);
                     },
                     slideChange: (swiper) => {
                         if (swiper && swiper.activeIndex !== undefined) {
