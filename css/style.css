@@ -207,24 +207,48 @@ body {
 
 /* レスポンシブ設定 */
 @media (max-width: 767px) {
-    /* モバイル: 上部余白を完全に除去 */
+    /* モバイル: 完全リセット */
+    * {
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+    
     html, body {
         margin: 0 !important;
         padding: 0 !important;
-        height: 100vh;
-        height: 100dvh; /* 動的ビューポート対応 */
-        overflow: hidden;
+        height: 100vh !important;
+        height: 100dvh !important; /* 動的ビューポート対応 */
+        width: 100vw !important;
+        overflow: hidden !important;
+        position: relative !important;
+        /* iPhone Safari用の余白除去 */
+        -webkit-text-size-adjust: 100% !important;
+        -webkit-overflow-scrolling: auto !important;
+    }
+    
+    body {
+        /* ブラウザのデフォルトマージンを強制除去 */
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        outline: 0 !important;
+        background: var(--gradient) !important;
     }
     
     .swipe-container {
         margin: 0 !important;
         padding: 0 !important;
-        height: 100vh;
-        height: 100dvh;
-        width: 100vw;
-        position: fixed;
-        top: 0;
-        left: 0;
+        height: 100vh !important;
+        height: 100dvh !important;
+        width: 100vw !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        z-index: 9999 !important;
+        background: var(--gradient) !important;
     }
     
     .swiper {
